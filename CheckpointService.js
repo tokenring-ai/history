@@ -1,4 +1,3 @@
-
 import { Service } from "@token-ring/registry";
 
 /**
@@ -14,68 +13,74 @@ import { Service } from "@token-ring/registry";
 /**
  * Abstract base class for checkpoint management services.
  * Provides the interface for creating, retrieving, and managing conversation checkpoints.
- * 
+ *
  * Checkpoints allow users to:
  * - Save specific points in a conversation for later reference
  * - Return to previous conversation states
  * - Branch conversations from saved points
  * - Preserve important conversation milestones
- * 
+ *
  * @abstract
  * @extends Service
  */
 export default class CheckpointService extends Service {
- /** @type {string} */
- name = "CheckpointService";
- 
- /** @type {string} */
- description = "Provides Checkpoint functionality";
+	/** @type {string} */
+	name = "CheckpointService";
 
- /**
-  * Reports the status of the service.
-  * @param {import('@token-ring/registry').TokenRingRegistry} registry - The package registry
-  * @returns {Promise<Object>} Status information
-  */
- async status(registry) {
-  return {
-   active: true,
-   service: "CheckpointService"
-  };
- }
+	/** @type {string} */
+	description = "Provides Checkpoint functionality";
 
- /**
-  * Creates a new checkpoint for the current conversation state.
-  * 
-  * @abstract
-  * @param {string} label - Human-readable label for the checkpoint
-  * @param {import('@token-ring/ai-client/ChatMessageStorage').ChatMessage} currentMessage - The current message to checkpoint
-  * @param {string|number} [sessionId] - Optional session ID for implementations that require it
-  * @returns {Promise<Checkpoint>} The created checkpoint
-  */
- async createCheckpoint(label, currentMessage, sessionId) {
-  throw new Error(`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`);
- }
+	/**
+	 * Reports the status of the service.
+	 * @param {import('@token-ring/registry').TokenRingRegistry} registry - The package registry
+	 * @returns {Promise<Object>} Status information
+	 */
+	async status(registry) {
+		return {
+			active: true,
+			service: "CheckpointService",
+		};
+	}
 
- /**
-  * Retrieves a checkpoint by its identifier or index.
-  * 
-  * @abstract
-  * @param {string|number} idxOrId - The checkpoint identifier or index
-  * @param {string|number} [sessionId] - Optional session ID for implementations that require it
-  * @returns {Promise<Checkpoint|null>} The retrieved checkpoint or null if not found
-  */
- async retrieveCheckpoint(idxOrId, sessionId) {
-  throw new Error(`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`);
- }
+	/**
+	 * Creates a new checkpoint for the current conversation state.
+	 *
+	 * @abstract
+	 * @param {string} label - Human-readable label for the checkpoint
+	 * @param {import('@token-ring/ai-client/ChatMessageStorage').ChatMessage} currentMessage - The current message to checkpoint
+	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
+	 * @returns {Promise<Checkpoint>} The created checkpoint
+	 */
+	async createCheckpoint(label, currentMessage, sessionId) {
+		throw new Error(
+			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
+		);
+	}
 
- /**
-  * Lists all checkpoints, typically ordered by creation time (newest first).
-  * 
-  * @abstract
-  * @param {string|number} [sessionId] - Optional session ID for implementations that require it
-  * @returns {Promise<Array<Checkpoint>>} Array of checkpoints
-  */
- async listCheckpoint(sessionId) {
-  throw new Error(`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`);
- }
+	/**
+	 * Retrieves a checkpoint by its identifier or index.
+	 *
+	 * @abstract
+	 * @param {string|number} idxOrId - The checkpoint identifier or index
+	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
+	 * @returns {Promise<Checkpoint|null>} The retrieved checkpoint or null if not found
+	 */
+	async retrieveCheckpoint(idxOrId, sessionId) {
+		throw new Error(
+			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
+		);
+	}
+
+	/**
+	 * Lists all checkpoints, typically ordered by creation time (newest first).
+	 *
+	 * @abstract
+	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
+	 * @returns {Promise<Array<Checkpoint>>} Array of checkpoints
+	 */
+	async listCheckpoint(sessionId) {
+		throw new Error(
+			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
+		);
+	}
 }
