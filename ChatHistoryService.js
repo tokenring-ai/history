@@ -51,7 +51,7 @@ export default class ChatHistoryService extends Service {
 	 * @param {import('@token-ring/registry').TokenRingRegistry} registry - The package registry
 	 * @returns {Promise<Object>} Status information
 	 */
-	async status(registry) {
+	async status(_registry) {
 		return {
 			active: true,
 			service: "ChatHistoryService",
@@ -78,7 +78,7 @@ export default class ChatHistoryService extends Service {
 	 * @param {string|number} sessionId - The session identifier
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of messages forming the thread tree
 	 */
-	async getThreadTree(sessionId) {
+	async getThreadTree(_sessionId) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);
@@ -93,7 +93,7 @@ export default class ChatHistoryService extends Service {
 	 * @param {number} [limit=10] - Maximum number of messages to return
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of recent messages
 	 */
-	async getRecentMessages(sessionId, limit = 10) {
+	async getRecentMessages(_sessionId, _limit = 10) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);
@@ -108,7 +108,7 @@ export default class ChatHistoryService extends Service {
 	 * @param {string|number} [sessionId] - Optional session ID to limit search scope
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of matching messages
 	 */
-	async searchMessages(keyword, sessionId) {
+	async searchMessages(_keyword, _sessionId) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);
@@ -122,7 +122,7 @@ export default class ChatHistoryService extends Service {
 	 * @param {string|number} messageId - The message identifier
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of messages in the conversation history
 	 */
-	async getChatHistoryByMessageId(messageId) {
+	async getChatHistoryByMessageId(_messageId) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);

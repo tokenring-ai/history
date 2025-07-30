@@ -74,7 +74,6 @@ export async function execute(remainder, registry) {
 
 			break;
 		}
-		case "list":
 		default: {
 			const savedCheckpoints = await checkpointService.listCheckpoint();
 			if (savedCheckpoints.length === 0) {
@@ -103,7 +102,7 @@ export async function execute(remainder, registry) {
 						hasChildren: true,
 						children: grouped[date]
 							.sort((a, b) => b.createdAt - a.createdAt) // Most recent first within date
-							.map((cp, index) => ({
+							.map((cp, _index) => ({
 								name: `⏰ ${new Date(cp.createdAt).toLocaleTimeString()} - ${cp.label}`,
 								value: cp.id,
 							})),

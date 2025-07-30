@@ -35,7 +35,7 @@ export default class CheckpointService extends Service {
 	 * @param {import('@token-ring/registry').TokenRingRegistry} registry - The package registry
 	 * @returns {Promise<Object>} Status information
 	 */
-	async status(registry) {
+	async status(_registry) {
 		return {
 			active: true,
 			service: "CheckpointService",
@@ -51,7 +51,7 @@ export default class CheckpointService extends Service {
 	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
 	 * @returns {Promise<Checkpoint>} The created checkpoint
 	 */
-	async createCheckpoint(label, currentMessage, sessionId) {
+	async createCheckpoint(_label, _currentMessage, _sessionId) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);
@@ -65,7 +65,7 @@ export default class CheckpointService extends Service {
 	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
 	 * @returns {Promise<Checkpoint|null>} The retrieved checkpoint or null if not found
 	 */
-	async retrieveCheckpoint(idxOrId, sessionId) {
+	async retrieveCheckpoint(_idxOrId, _sessionId) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);
@@ -78,7 +78,7 @@ export default class CheckpointService extends Service {
 	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
 	 * @returns {Promise<Array<Checkpoint>>} Array of checkpoints
 	 */
-	async listCheckpoint(sessionId) {
+	async listCheckpoint(_sessionId) {
 		throw new Error(
 			`The ${import.meta.filename} class is abstract and cannot be used directly. Please use a subclass instead.`,
 		);

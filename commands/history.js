@@ -3,7 +3,7 @@ import ChatHistoryService from "../ChatHistoryService.js";
 
 export const description = "/history - Browse chat history";
 
-export async function execute(remainder, registry) {
+export async function execute(_remainder, registry) {
 	const chatService = registry.requireFirstServiceByType(ChatService);
 	const humanInterfaceService = registry.requireFirstServiceByType(
 		HumanInterfaceService,
