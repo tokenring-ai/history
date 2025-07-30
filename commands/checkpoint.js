@@ -1,7 +1,7 @@
+import { ChatMessageStorage } from "@token-ring/ai-client";
+import { HumanInterfaceService } from "@token-ring/chat";
 import ChatService from "@token-ring/chat/ChatService";
 import CheckpointService from "../CheckpointService.js";
-import { HumanInterfaceService } from "@token-ring/chat";
-import { ChatMessageStorage } from "@token-ring/ai-client";
 
 /**
  * /checkpoint create [label] - stores current previous_response_id as a checkpoint.
