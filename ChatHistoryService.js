@@ -48,7 +48,7 @@ export default class ChatHistoryService extends Service {
 
 	/**
 	 * Reports the status of the service.
-	 * @param {import('@token-ring/registry').TokenRingRegistry} registry - The package registry
+	 * @param {import('@token-ring/registry').Registry} _registry - The package registry
 	 * @returns {Promise<Object>} Status information
 	 */
 	async status(_registry) {
@@ -75,7 +75,7 @@ export default class ChatHistoryService extends Service {
 	 * This includes all messages in the session with their relationships.
 	 *
 	 * @abstract
-	 * @param {string|number} sessionId - The session identifier
+	 * @param {string|number} _sessionId - The session identifier
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of messages forming the thread tree
 	 */
 	async getThreadTree(_sessionId) {
@@ -89,8 +89,8 @@ export default class ChatHistoryService extends Service {
 	 * Messages are typically returned in chronological order (oldest first).
 	 *
 	 * @abstract
-	 * @param {string|number} sessionId - The session identifier
-	 * @param {number} [limit=10] - Maximum number of messages to return
+	 * @param {string|number} _sessionId - The session identifier
+	 * @param {number} [_limit=10] - Maximum number of messages to return
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of recent messages
 	 */
 	async getRecentMessages(_sessionId, _limit = 10) {
@@ -104,8 +104,8 @@ export default class ChatHistoryService extends Service {
 	 * Searches both request and response content.
 	 *
 	 * @abstract
-	 * @param {string} keyword - The keyword to search for
-	 * @param {string|number} [sessionId] - Optional session ID to limit search scope
+	 * @param {string} _keyword - The keyword to search for
+	 * @param {string|number} [_sessionId] - Optional session ID to limit search scope
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of matching messages
 	 */
 	async searchMessages(_keyword, _sessionId) {
@@ -119,7 +119,7 @@ export default class ChatHistoryService extends Service {
 	 * This reconstructs the conversation context for a given message.
 	 *
 	 * @abstract
-	 * @param {string|number} messageId - The message identifier
+	 * @param {string|number} _messageId - The message identifier
 	 * @returns {Promise<Array<ChatHistoryMessage>>} Array of messages in the conversation history
 	 */
 	async getChatHistoryByMessageId(_messageId) {

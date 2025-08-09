@@ -31,7 +31,7 @@ export async function execute(_remainder, registry) {
 			};
 
 			const sortedDates = Object.keys(sessionsByDate).sort(
-				(a, b) => new Date(b) - new Date(a),
+				(a, b) => new Date(b).getTime() - new Date(a).getTime(),
 			);
 
 			for (const date of sortedDates) {

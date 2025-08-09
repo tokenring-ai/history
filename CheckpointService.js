@@ -32,7 +32,7 @@ export default class CheckpointService extends Service {
 
 	/**
 	 * Reports the status of the service.
-	 * @param {import('@token-ring/registry').TokenRingRegistry} registry - The package registry
+	 * @param {import('@token-ring/registry').Registry} _registry - The package registry
 	 * @returns {Promise<Object>} Status information
 	 */
 	async status(_registry) {
@@ -46,9 +46,9 @@ export default class CheckpointService extends Service {
 	 * Creates a new checkpoint for the current conversation state.
 	 *
 	 * @abstract
-	 * @param {string} label - Human-readable label for the checkpoint
-	 * @param {import('@token-ring/ai-client/ChatMessageStorage').ChatMessage} currentMessage - The current message to checkpoint
-	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
+	 * @param {string} _label - Human-readable label for the checkpoint
+	 * @param {import('@token-ring/ai-client/ChatMessageStorage').ChatMessage} _currentMessage - The current message to checkpoint
+	 * @param {string|number} [_sessionId] - Optional session ID for implementations that require it
 	 * @returns {Promise<Checkpoint>} The created checkpoint
 	 */
 	async createCheckpoint(_label, _currentMessage, _sessionId) {
@@ -61,8 +61,8 @@ export default class CheckpointService extends Service {
 	 * Retrieves a checkpoint by its identifier or index.
 	 *
 	 * @abstract
-	 * @param {string|number} idxOrId - The checkpoint identifier or index
-	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
+	 * @param {string|number} _idxOrId - The checkpoint identifier or index
+	 * @param {string|number} [_sessionId] - Optional session ID for implementations that require it
 	 * @returns {Promise<Checkpoint|null>} The retrieved checkpoint or null if not found
 	 */
 	async retrieveCheckpoint(_idxOrId, _sessionId) {
@@ -75,7 +75,7 @@ export default class CheckpointService extends Service {
 	 * Lists all checkpoints, typically ordered by creation time (newest first).
 	 *
 	 * @abstract
-	 * @param {string|number} [sessionId] - Optional session ID for implementations that require it
+	 * @param {string|number} [_sessionId] - Optional session ID for implementations that require it
 	 * @returns {Promise<Array<Checkpoint>>} Array of checkpoints
 	 */
 	async listCheckpoint(_sessionId) {
