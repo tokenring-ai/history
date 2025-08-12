@@ -1,27 +1,6 @@
 import { Service } from "@token-ring/registry";
+import {StoredChatMessage, StoredChatSession} from "@token-ring/ai-client/ChatMessageStorage";
 
-export interface ChatSession {
-  id: string | number;
-  title: string;
-  createdAt: number;
-  lastActivity?: number;
-  previewText?: string;
-}
-
-export interface ChatHistoryMessage {
-  id: string | number;
-  sessionId: string | number;
-  previousMessageId?: string | number;
-  request: string | Record<string, any>;
-  response?: string | Record<string, any>;
-  cumulativeInputLength?: number;
-  priorState?: string | Record<string, any>;
-  createdAt: number;
-  updatedAt?: number;
-  timestamp?: number;
-  content?: string;
-  text?: string;
-}
 
 /**
  * Abstract base class for chat history management services.
@@ -44,7 +23,7 @@ export default class ChatHistoryService extends Service {
   /**
    * Returns all chat sessions, typically ordered by most recent activity.
    */
-  async listSessions(): Promise<ChatSession[]> {
+  async listSessions(): Promise<StoredChatSession[]> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );
@@ -53,7 +32,7 @@ export default class ChatHistoryService extends Service {
   /**
    * Gets the complete thread tree for a session, showing the conversation flow.
    */
-  async getThreadTree(_sessionId: string | number): Promise<ChatHistoryMessage[]> {
+  async getThreadTree(_sessionId: string): Promise<StoredChatMessage[]> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );
@@ -64,9 +43,9 @@ export default class ChatHistoryService extends Service {
    * Messages are typically returned in chronological order (oldest first).
    */
   async getRecentMessages(
-    _sessionId: string | number,
+    _sessionId: string,
     _limit: number = 10,
-  ): Promise<ChatHistoryMessage[]> {
+  ): Promise<StoredChatMessage[]> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );
@@ -78,8 +57,8 @@ export default class ChatHistoryService extends Service {
    */
   async searchMessages(
     _keyword: string,
-    _sessionId?: string | number,
-  ): Promise<ChatHistoryMessage[]> {
+    _sessionId?: string,
+  ): Promise<StoredChatMessage[]> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );
@@ -90,8 +69,8 @@ export default class ChatHistoryService extends Service {
    * This reconstructs the conversation context for a given message.
    */
   async getChatHistoryByMessageId(
-    _messageId: string | number,
-  ): Promise<ChatHistoryMessage[]> {
+    _messageId: string,
+  ): Promise<StoredChatMessage[]> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );

@@ -1,10 +1,10 @@
 import { Service } from "@token-ring/registry";
 
 export interface Checkpoint {
-  id: string | number;
+  id: string;
   label: string;
-  messageId: string | number;
-  currentMessage?: import("@token-ring/ai-client/ChatMessageStorage").ChatMessage;
+  messageId: string;
+  currentMessage?: import("@token-ring/ai-client/ChatMessageStorage").StoredChatMessage;
   createdAt: number;
   timestamp?: number;
 }
@@ -26,8 +26,8 @@ export default class CheckpointService extends Service {
 
   async createCheckpoint(
     _label: string,
-    _currentMessage: import("@token-ring/ai-client/ChatMessageStorage").ChatMessage,
-    _sessionId?: string | number,
+    _currentMessage: import("@token-ring/ai-client/ChatMessageStorage").StoredChatMessage,
+    _sessionId?: string,
   ): Promise<Checkpoint> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
@@ -35,15 +35,15 @@ export default class CheckpointService extends Service {
   }
 
   async retrieveCheckpoint(
-    _idxOrId: string | number,
-    _sessionId?: string | number,
+      _idxOrId: string,
+      _sessionId?: string,
   ): Promise<Checkpoint | null> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );
   }
 
-  async listCheckpoint(_sessionId?: string | number): Promise<Checkpoint[]> {
+  async listCheckpoint(_sessionId?: string): Promise<Checkpoint[]> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,
     );

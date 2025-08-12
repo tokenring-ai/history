@@ -1,6 +1,7 @@
 {
 	"name": "@token-ring/history",
 	"version": "0.1.0",
+ "description": "History service for token-ring",
 	"dependencies": {
 		"@token-ring/ai-client": "0.1.0",
 		"@token-ring/chat": "0.1.0",

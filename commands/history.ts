@@ -1,11 +1,13 @@
 import { ChatService, HumanInterfaceService } from "@token-ring/chat";
 import ChatHistoryService from "../ChatHistoryService.ts";
+import {Registry} from "@token-ring/registry";
+import {StoredChatSession} from "@token-ring/ai-client/ChatMessageStorage";
 
 export const description: string = "/history - Browse chat history";
 
 export async function execute(
   _remainder: string | undefined,
-  registry: import("@token-ring/registry").Registry,
+  registry: Registry,
 ): Promise<void> {
   const chatService = registry.requireFirstServiceByType(ChatService);
   const humanInterfaceService = registry.requireFirstServiceByType(
@@ -30,7 +32,7 @@ export async function execute(
     const buildHistoryTree = () => {
       const tree: any = {
         name: "Chat History",
-        children: [] as any[],
+        children: [],
       };
 
       const sortedDates = Object.keys(sessionsByDate).sort(
@@ -47,7 +49,7 @@ export async function execute(
 
         tree.children.push({
           name: `📅 ${formatDate(date)} (${dateSessions.length} sessions)`,
-          value: date,
+          //value: date,
           hasChildren: true,
           children,
         });
@@ -57,16 +59,21 @@ export async function execute(
     };
 
     // Show interactive tree selection
-    const selectedSessionId = await humanInterfaceService.askForTreeSelection({
+    const selectedSessionId = await humanInterfaceService.askForSingleTreeSelection({
       message: "Select chat sessions to view:",
       tree: buildHistoryTree(),
-      multiple: false,
       allowCancel: true,
-    } as any);
+    } );
 
     if (selectedSessionId) {
+        const selectedSession = sessions.find(({id}) => id === selectedSessionId);
+        if (!selectedSession) {
+            chatService.errorLine(`Session ${selectedSessionId} could not be retrieved.`);
+            return;
+        }
+
       await displaySessionHistory(
-        sessions.find(({ id }) => id === selectedSessionId)!,
+          selectedSession,
         historyStorage,
         chatService,
       );
@@ -82,12 +89,12 @@ export async function execute(
 function groupSessionsByDate(
   sessions: Array<Awaited<ReturnType<typeof ChatHistoryService.prototype.listSessions>>[number]>,
 ): Record<string, typeof sessions> {
-  const grouped: Record<string, typeof sessions> = {} as any;
+  const grouped: Record<string, typeof sessions> = {};
 
   for (const session of sessions) {
     const date = new Date(session.createdAt).toISOString().split("T")[0];
     if (!grouped[date]) {
-      grouped[date] = [] as any;
+      grouped[date] = [] ;
     }
     grouped[date].push(session);
   }
@@ -128,7 +135,7 @@ function formatTime(timestamp: number): string {
 
 // Display session history
 async function displaySessionHistory(
-  session: Awaited<ReturnType<typeof ChatHistoryService.prototype.listSessions>>[number],
+  session: StoredChatSession,
   historyStorage: ChatHistoryService,
   chatService: ChatService,
 ): Promise<void> {
@@ -149,14 +156,14 @@ async function displaySessionHistory(
     }
 
     for (const message of messages as any[]) {
-      if ((message as any).request) {
-        chatService.systemLine(`\n👤 User (${formatTime((message as any).createdAt)}):`);
-        chatService.systemLine((message as any).request);
+      if (message.request) {
+        chatService.systemLine(`\n👤 User (${formatTime(message.createdAt)}):`);
+        chatService.systemLine(message.request);
       }
 
-      if ((message as any).response) {
+      if (message.response) {
         chatService.systemLine(`\n🤖 Assistant:`);
-        chatService.systemLine((message as any).response);
+        chatService.systemLine(message.response);
       }
     }
 
