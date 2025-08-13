@@ -1,4 +1,4 @@
-import { ChatService, HumanInterfaceService } from "@token-ring/chat";
+import {ChatService, HumanInterfaceService} from "@token-ring/chat";
 import ChatHistoryService from "../ChatHistoryService.ts";
 import {Registry} from "@token-ring/registry";
 import {StoredChatSession} from "@token-ring/ai-client/ChatMessageStorage";
