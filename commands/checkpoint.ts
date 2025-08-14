@@ -164,8 +164,16 @@ export async function execute(
 
 export function help(): string[] {
     return [
-        "/checkpoint create  <label>  - Create a new checkpoint with optional label",
-        "/checkpoint restore <id>     - Restore a specific checkpoint by ID",
-        "/checkpoint list             - Show interactive tree selection of checkpoints grouped by date",
+        "/checkpoint [action] [args...] - Create or restore conversation checkpoints",
+        "  Actions:",
+        "    create [label]     - Create checkpoint with optional label",
+        "    restore <id>       - Restore specific checkpoint by ID",
+        "    list               - Interactive tree selection of checkpoints",
+        "",
+        "  Examples:",
+        "    /checkpoint create           - Create checkpoint with default label",
+        "    /checkpoint create 'My Fix'  - Create checkpoint with custom label",
+        "    /checkpoint restore abc123   - Restore specific checkpoint",
+        "    /checkpoint list             - Show interactive checkpoint browser",
     ];
 }
