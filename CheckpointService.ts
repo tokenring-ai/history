@@ -35,8 +35,8 @@ export default class CheckpointService extends Service {
   }
 
   async retrieveCheckpoint(
-      _idxOrId: string,
-      _sessionId?: string,
+    _idxOrId: string,
+    _sessionId?: string,
   ): Promise<Checkpoint | null> {
     throw new Error(
       `The ${this.constructor.name} class is abstract and cannot be used directly. Please use a subclass instead.`,

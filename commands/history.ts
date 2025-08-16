@@ -1,7 +1,7 @@
-import {ChatService, HumanInterfaceService} from "@token-ring/chat";
-import ChatHistoryService from "../ChatHistoryService.ts";
-import {Registry} from "@token-ring/registry";
 import {StoredChatSession} from "@token-ring/ai-client/ChatMessageStorage";
+import {ChatService, HumanInterfaceService} from "@token-ring/chat";
+import {Registry} from "@token-ring/registry";
+import ChatHistoryService from "../ChatHistoryService.ts";
 
 export const description: string = "/history - Browse chat history";
 
@@ -63,17 +63,17 @@ export async function execute(
       message: "Select chat sessions to view:",
       tree: buildHistoryTree(),
       allowCancel: true,
-    } );
+    });
 
     if (selectedSessionId) {
-        const selectedSession = sessions.find(({id}) => id === selectedSessionId);
-        if (!selectedSession) {
-            chatService.errorLine(`Session ${selectedSessionId} could not be retrieved.`);
-            return;
-        }
+      const selectedSession = sessions.find(({id}) => id === selectedSessionId);
+      if (!selectedSession) {
+        chatService.errorLine(`Session ${selectedSessionId} could not be retrieved.`);
+        return;
+      }
 
       await displaySessionHistory(
-          selectedSession,
+        selectedSession,
         historyStorage,
         chatService,
       );
@@ -94,7 +94,7 @@ function groupSessionsByDate(
   for (const session of sessions) {
     const date = new Date(session.createdAt).toISOString().split("T")[0];
     if (!grouped[date]) {
-      grouped[date] = [] ;
+      grouped[date] = [];
     }
     grouped[date].push(session);
   }

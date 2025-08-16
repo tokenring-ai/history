@@ -1,5 +1,5 @@
-import {Service} from "@token-ring/registry";
 import {StoredChatMessage, StoredChatSession} from "@token-ring/ai-client/ChatMessageStorage";
+import {Service} from "@token-ring/registry";
 
 
 /**
