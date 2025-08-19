@@ -61,8 +61,7 @@ export async function execute(
     // Show interactive tree selection
     const selectedSessionId = await humanInterfaceService.askForSingleTreeSelection({
       message: "Select chat sessions to view:",
-      tree: buildHistoryTree(),
-      allowCancel: true,
+      tree: buildHistoryTree()
     });
 
     if (selectedSessionId) {
@@ -176,6 +175,7 @@ async function displaySessionHistory(
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function help(): string[] {
   return [
     "/history",

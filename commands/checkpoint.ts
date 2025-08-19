@@ -123,8 +123,7 @@ export async function execute(
 
         const selectedId = await humanInterfaceService.askForSingleTreeSelection({
           message: "Select a checkpoint to restore:",
-          tree,
-          allowCancel: true,
+          tree
         });
 
         if (!selectedId) {
@@ -162,6 +161,7 @@ export async function execute(
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function help(): string[] {
   return [
     "/checkpoint [action] [args...] - Create or restore conversation checkpoints",
