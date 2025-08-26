@@ -154,7 +154,7 @@ async function displaySessionHistory(
       return;
     }
 
-    for (const message of messages as any[]) {
+    for (const message of messages) {
       if (message.request) {
         chatService.systemLine(`\n👤 User (${formatTime(message.createdAt)}):`);
         chatService.systemLine(message.request);
