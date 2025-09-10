@@ -1,4 +1,4 @@
-# @token-ring/history
+# @tokenring-ai/history
 
 History and checkpoint services for Token Ring. This package defines abstract service interfaces and chat commands for
 browsing chat history and creating/restoring conversation checkpoints. Concrete storage backends (e.g., SQLite) can
@@ -48,7 +48,7 @@ Defines the interface for chat history management:
 
 Notes:
 
-- StoredChatSession and StoredChatMessage are imported types from @token-ring/ai-client/ChatMessageStorage.
+- StoredChatSession and StoredChatMessage are imported types from @tokenring-ai/ai-client/ChatMessageStorage.
 - The default methods throw; register a concrete implementation in your Registry.
 
 ## CheckpointService (abstract)
@@ -93,7 +93,7 @@ As with ChatHistoryService, these methods throw by default and must be implement
 This package defines abstract services only. For persistence, use one of the storage packages that implement these
 interfaces. For example:
 
-- @token-ring/sqlite-storage
+- @tokenring-ai/sqlite-storage
 - SQLiteChatHistoryStorage: A concrete history storage backend compatible with ChatHistoryService.
 - SQLiteCLIHistoryStorage: A CLI history storage (e.g., for shell-like histories).
 
@@ -103,12 +103,12 @@ resolve via the Registry.
 ## Example: registering services
 
 ```ts
-import {ServiceRegistry} from "@token-ring/registry";
-import {ChatService, HumanInterfaceService} from "@token-ring/chat";
-import {ChatMessageStorage} from "@token-ring/ai-client";
-import {ChatHistoryService, CheckpointService, chatCommands} from "@token-ring/history";
-// Import your concrete implementations, e.g., from @token-ring/sqlite-storage
-import {SQLiteChatHistoryStorage} from "@token-ring/sqlite-storage";
+import {ServiceRegistry} from "@tokenring-ai/registry";
+import {ChatService, HumanInterfaceService} from "@tokenring-ai/chat";
+import {ChatMessageStorage} from "@tokenring-ai/ai-client";
+import {ChatHistoryService, CheckpointService, chatCommands} from "@tokenring-ai/history";
+// Import your concrete implementations, e.g., from @tokenring-ai/sqlite-storage
+import {SQLiteChatHistoryStorage} from "@tokenring-ai/sqlite-storage";
 
 const registry = new ServiceRegistry();
 await registry.start();
@@ -152,9 +152,9 @@ Commands
 
 This package relies on types and services from peer packages:
 
-- @token-ring/registry (Service base and Registry)
-- @token-ring/chat (ChatService, HumanInterfaceService)
-- @token-ring/ai-client (ChatMessageStorage types and current message handling)
+- @tokenring-ai/registry (Service base and Registry)
+- @tokenring-ai/chat (ChatService, HumanInterfaceService)
+- @tokenring-ai/ai-client (ChatMessageStorage types and current message handling)
 
 ## Notes and limitations
 

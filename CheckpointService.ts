@@ -1,10 +1,10 @@
-import {Service} from "@token-ring/registry";
+import {TokenRingService} from "@tokenring-ai/agent/types";
 
 export interface Checkpoint {
   id: string;
   label: string;
   messageId: string;
-  currentMessage?: import("@token-ring/ai-client/ChatMessageStorage").StoredChatMessage;
+  currentMessage?: import("@tokenring-ai/ai-client/ChatMessageStorage").StoredChatMessage;
   createdAt: number;
   timestamp?: number;
 }
@@ -13,20 +13,13 @@ export interface Checkpoint {
  * Abstract base class for checkpoint management services.
  * Provides the interface for creating, retrieving, and managing conversation checkpoints.
  */
-export default class CheckpointService extends Service {
+export default class CheckpointService implements TokenRingService {
   name: string = "CheckpointService";
   description: string = "Provides Checkpoint functionality";
 
-  async status(_registry: import("@token-ring/registry").Registry): Promise<object> {
-    return {
-      active: true,
-      service: "CheckpointService",
-    } as const;
-  }
-
   async createCheckpoint(
     _label: string,
-    _currentMessage: import("@token-ring/ai-client/ChatMessageStorage").StoredChatMessage,
+    _currentMessage: import("@tokenring-ai/ai-client/ChatMessageStorage").StoredChatMessage,
     _sessionId?: string,
   ): Promise<Checkpoint> {
     throw new Error(

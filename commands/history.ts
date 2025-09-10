@@ -1,27 +1,21 @@
-import {StoredChatSession} from "@token-ring/ai-client/ChatMessageStorage";
-import {ChatService, HumanInterfaceService} from "@token-ring/chat";
-import {Registry} from "@token-ring/registry";
+import {Agent} from "@tokenring-ai/agent";
+import {StoredChatSession} from "@tokenring-ai/ai-client/ChatMessageStorage";
 import ChatHistoryService from "../ChatHistoryService.ts";
 
 export const description: string = "/history - Browse chat history";
 
 export async function execute(
   _remainder: string | undefined,
-  registry: Registry,
+  agent: Agent,
 ): Promise<void> {
-  const chatService = registry.requireFirstServiceByType(ChatService);
-  const humanInterfaceService = registry.requireFirstServiceByType(
-    HumanInterfaceService,
-  );
-
   // Get the chat history storage service
-  const historyStorage = registry.requireFirstServiceByType(ChatHistoryService);
+  const historyStorage = agent.requireFirstServiceByType(ChatHistoryService);
   try {
     // Get all chat sessions
     const sessions = await historyStorage.listSessions();
 
     if (!sessions || sessions.length === 0) {
-      chatService.systemLine("No chat history found.");
+      agent.infoLine("No chat history found.");
       return;
     }
 
@@ -59,7 +53,8 @@ export async function execute(
     };
 
     // Show interactive tree selection
-    const selectedSessionId = await humanInterfaceService.askForSingleTreeSelection({
+    const selectedSessionId = await agent.askHuman({
+      type: "askForSingleTreeSelection",
       message: "Select chat sessions to view:",
       tree: buildHistoryTree()
     });
@@ -67,20 +62,20 @@ export async function execute(
     if (selectedSessionId) {
       const selectedSession = sessions.find(({id}) => id === selectedSessionId);
       if (!selectedSession) {
-        chatService.errorLine(`Session ${selectedSessionId} could not be retrieved.`);
+        agent.errorLine(`Session ${selectedSessionId} could not be retrieved.`);
         return;
       }
 
       await displaySessionHistory(
         selectedSession,
         historyStorage,
-        chatService,
+        agent,
       );
     } else {
-      chatService.systemLine("History browsing cancelled.");
+      agent.infoLine("History browsing cancelled.");
     }
   } catch (error) {
-    chatService.errorLine("Error browsing chat history:", error);
+    agent.errorLine("Error browsing chat history:", error as Error);
   }
 }
 
@@ -136,12 +131,12 @@ function formatTime(timestamp: number): string {
 async function displaySessionHistory(
   session: StoredChatSession,
   historyStorage: ChatHistoryService,
-  chatService: ChatService,
+  agent: Agent,
 ): Promise<void> {
-  chatService.systemLine(
+  agent.infoLine(
     `\n=== Session: ${session.title || `Session ${session.id}`} ===`,
   );
-  chatService.systemLine(
+  agent.infoLine(
     `Created: ${new Date(session.createdAt).toLocaleString()}`,
   );
 
@@ -150,27 +145,27 @@ async function displaySessionHistory(
     const messages = await historyStorage.getRecentMessages(session.id, 10);
 
     if (messages.length === 0) {
-      chatService.systemLine("No messages in this session.");
+      agent.infoLine("No messages in this session.");
       return;
     }
 
     for (const message of messages) {
       if (message.request) {
-        chatService.systemLine(`\n👤 User (${formatTime(message.createdAt)}):`);
-        chatService.systemLine(message.request);
+        agent.infoLine(`\n👤 User (${formatTime(message.createdAt)}):`);
+        agent.infoLine(JSON.stringify(message.request, null, 2));
       }
 
       if (message.response) {
-        chatService.systemLine(`\n🤖 Assistant:`);
-        chatService.systemLine(message.response);
+        agent.infoLine(`\n🤖 Assistant:`);
+        agent.infoLine(JSON.stringify(message.response, null, 2));
       }
     }
 
-    chatService.systemLine(`\n--- End of Session ---\n`);
+    agent.infoLine(`\n--- End of Session ---\n`);
   } catch (error) {
-    chatService.errorLine(
+    agent.errorLine(
       `Error loading messages for session ${session.id}:`,
-      error,
+      error as Error,
     );
   }
 }

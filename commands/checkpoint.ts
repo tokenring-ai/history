@@ -1,6 +1,5 @@
-import {ChatMessageStorage} from "@token-ring/ai-client";
-import {HumanInterfaceService} from "@token-ring/chat";
-import ChatService from "@token-ring/chat/ChatService";
+import {Agent} from "@tokenring-ai/agent";
+import {ChatMessageStorage} from "@tokenring-ai/ai-client";
 import CheckpointService from "../CheckpointService.ts";
 
 /**
@@ -14,16 +13,12 @@ export const description: string =
 
 export async function execute(
   remainder: string | undefined,
-  registry: import("@token-ring/registry").Registry,
+  agent: Agent,
 ): Promise<void> {
-  const chatService = registry.requireFirstServiceByType(ChatService);
   const checkpointService =
-    registry.requireFirstServiceByType(CheckpointService);
+    agent.requireFirstServiceByType(CheckpointService);
   const chatMessageStorage =
-    registry.requireFirstServiceByType(ChatMessageStorage);
-  const humanInterfaceService = registry.getFirstServiceByType(
-    HumanInterfaceService,
-  );
+    agent.requireFirstServiceByType(ChatMessageStorage);
 
   const [action, ...args] = (remainder || "").trim().split(/\s+/);
 
@@ -32,7 +27,7 @@ export async function execute(
   switch (action) {
     case "create": {
       if (!currentMessage) {
-        chatService.errorLine(
+        agent.errorLine(
           "No active chat to checkpoint. Ask at least one question first.",
         );
         return;
@@ -44,13 +39,13 @@ export async function execute(
         currentMessage,
       );
 
-      chatService.systemLine(`Checkpoint created: ${row.id}: ${row.label}`);
+      agent.infoLine(`Checkpoint created: ${row.id}: ${row.label}`);
 
       break;
     }
     case "restore": {
       if (!args[0]) {
-        chatService.errorLine(
+        agent.errorLine(
           "Usage: /checkpoint restore <id> (see /checkpoint list for ids)",
         );
         return;
@@ -63,15 +58,15 @@ export async function execute(
           row.messageId,
         );
         if (message) {
-          chatService.systemLine(`Checkpoint ${row.id} loaded: ${row.label}`);
+          agent.infoLine(`Checkpoint ${row.id} loaded: ${row.label}`);
           chatMessageStorage.setCurrentMessage(message);
         } else {
-          chatService.errorLine(
+          agent.errorLine(
             `Message ${row.messageId} not found. Checkpoint ${row.id} exists, but no message loaded.`,
           );
         }
       } else {
-        chatService.errorLine(`Checkpoint ${args[0]} not found.`);
+        agent.errorLine(`Checkpoint ${args[0]} not found.`);
         return;
       }
 
@@ -80,7 +75,7 @@ export async function execute(
     default: {
       const savedCheckpoints = await checkpointService.listCheckpoint();
       if (savedCheckpoints.length === 0) {
-        chatService.systemLine(
+        agent.infoLine(
           "No checkpoints saved. Use /checkpoint create to make one.",
         );
         break;
@@ -114,20 +109,15 @@ export async function execute(
 
       // Show interactive tree selection
       try {
-        if (!humanInterfaceService) {
-          chatService.errorLine(
-            "HumanInterfaceService not found. Checkpoint selection not available.",
-          );
-          return;
-        }
 
-        const selectedId = await humanInterfaceService.askForSingleTreeSelection({
+        const selectedId = await agent.askHuman({
+          type: "askForSingleTreeSelection",
           message: "Select a checkpoint to restore:",
           tree
         });
 
         if (!selectedId) {
-          chatService.systemLine(
+          agent.infoLine(
             "Checkpoint selection cancelled. No changes made.",
           );
           return;
@@ -136,7 +126,7 @@ export async function execute(
         const row = await checkpointService.retrieveCheckpoint(selectedId);
 
         if (!row) {
-          chatService.errorLine(`Checkpoint ${selectedId} not found.`);
+          agent.errorLine(`Checkpoint ${selectedId} not found.`);
           return;
         }
 
@@ -145,16 +135,16 @@ export async function execute(
         );
 
         if (!message) {
-          chatService.errorLine(
+          agent.errorLine(
             `Message ${row.messageId} not found. Checkpoint ${row.id} exists, but no message loaded.`,
           );
           return;
         }
 
-        chatService.systemLine(`Checkpoint ${row.id} loaded: ${row.label}`);
+        agent.infoLine(`Checkpoint ${row.id} loaded: ${row.label}`);
         chatMessageStorage.setCurrentMessage(message);
       } catch (error) {
-        chatService.errorLine(`Error during checkpoint selection: ${error}`);
+        agent.errorLine(`Error during checkpoint selection: ${error}`);
       }
       break;
     }

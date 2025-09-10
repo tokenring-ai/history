@@ -1,11 +1,10 @@
 {
- "name": "@token-ring/history",
+ "name": "@tokenring-ai/history",
  "version": "0.1.0",
- "description": "History service for token-ring",
+ "description": "History service for tokenring-ai",
  "dependencies": {
-  "@token-ring/ai-client": "0.1.0",
-  "@token-ring/chat": "0.1.0",
-  "@token-ring/registry": "0.1.0"
+  "@tokenring-ai/ai-client": "0.1.0",
+  "@tokenring-ai/agent": "0.1.0"
  },
  "exports": {
   ".": "./index.ts",
